@@ -13,10 +13,15 @@ bs.insert(2)
 bs.insert(7)
 bs.prettyPrint(bs.root)
 console.log("----------- BREAK -----------")
-bs.deleteItem(2)
-bs.deleteItem(1)
-bs.deleteItem(8)
-bs.deleteItem(67)
-bs.deleteItem(7)
-bs.prettyPrint(bs.root)
-console.log("----------- BREAK 2 -----------")
+// bs.deleteItem(2)
+// bs.deleteItem(1)
+// bs.deleteItem(8)
+// bs.deleteItem(67)
+// bs.deleteItem(7)
+// bs.prettyPrint(bs.root)
+// console.log("----------- BREAK 2 -----------")
+
+console.log("LevelOrder: ", bs.levelOrderForEach(bs.root));
+console.log("InOrder: ",bs.inOrderForEach(bs.root));
+console.log("PreOrder: ",bs.preOrderForEach(bs.root));
+console.log("PostOrder: ",bs.postOrderForEach(bs.root));

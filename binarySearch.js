@@ -150,19 +150,50 @@ export default class BinarySearch {
     
 
     levelOrderForEach(callback) {
+        if (!callback) return [];
 
+        const order = [];
+        const queue = [callback];
+
+        while (queue.length > 0) {
+            const node = queue.shift(); 
+            order.push(node.data);     
+
+            if (node.left)  queue.push(node.left); 
+            if (node.right) queue.push(node.right); 
+        }
+
+        return order;
     }
 
-    inOrderForEach(callback) {
+    inOrderForEach(callback, order = []) { 
+        if (!callback) return; 
 
+        this.inOrderForEach(callback.left, order); 
+        order.push(callback.data); 
+        this.inOrderForEach(callback.right, order); 
+
+        return order;
     }
 
-    preOrderForEach(callback) {
+    preOrderForEach(callback,  order = []) { 
+        if (!callback) return; 
         
+        order.push(callback.data); 
+        this.preOrderForEach(callback.left, order); 
+        this.preOrderForEach(callback.right, order);
+
+        return order;
     }
 
-    postOrderForEach(callback) {
+    postOrderForEach(callback,  order = []) { 
+        if (!callback) return; 
         
+        this.postOrderForEach(callback.left, order); 
+        this.postOrderForEach(callback.right, order); 
+        order.push(callback.data); 
+
+        return order;
     }
 
     height(value) {
