@@ -17,7 +17,7 @@ export default class BinarySearch {
         root.data = array[0];
         this.root = root;
         
-        function loopNode(i, currentNode) {
+        function loopBuild(i, currentNode) {
             if (i >= array.length) return;
 
             let nextNode = new Node();
@@ -25,22 +25,22 @@ export default class BinarySearch {
             
             if (array[i] > currentNode.data) {
                 if (currentNode.right) {
-                    loopNode(i, currentNode.right)
+                    loopBuild(i, currentNode.right)
                 } else {
                     currentNode.right = nextNode
-                    loopNode(++i, root);
+                    loopBuild(++i, root);
                 };
             } else {
                 if (currentNode.left) {
-                    loopNode(i, currentNode.left)
+                    loopBuild(i, currentNode.left)
                 } else {
                     currentNode.left = nextNode
-                    loopNode(++i, root);
+                    loopBuild(++i, root);
                 };
             };
         };
 
-        loopNode(1,root);
+        loopBuild(1,root);
     }
 
     includes(value) {
@@ -62,12 +62,92 @@ export default class BinarySearch {
     }
 
     insert(value) {
+        let newNode = new Node()
+        newNode.data = value;
+        loopNode(this.root, newNode)
 
+        function loopNode(node, vNode) {
+            if (node.data === vNode.data) {
+                return console.log(vNode.data, "is a duplicate, process terminated");
+            } else  {
+                if (node.data > vNode.data) {
+                    if (!node.left) {
+                        node.left = vNode
+                    } else {
+                        loopNode(node.left, vNode);
+                    }
+                } else {
+                    if (!node.right) {
+                        node.right = vNode
+                    } else {
+                        loopNode(node.right, vNode);
+                    }
+                }
+            }
+        }
     }
 
     deleteItem(value) {
+        function loopNode(parent, node) {
+            if (!node) return null;
+            if (node.data === value) return [parent, node];
+            if (node.data > value) return loopNode(node, node.left);
+            return loopNode(node, node.right);
+        }
 
-    }
+        const removeNode = loopNode(null, this.root);
+        if (!removeNode) return;
+
+        const [pN, rN] = removeNode;
+
+        console.log("Parent of RN: ", pN)
+        console.log("RN: ", rN)
+
+        function loopNode2(parent, node) {
+            if (!node.left && !node.right) {
+                return [parent,node];
+            } else {
+                if (rN.data > node.data) {
+                    if (node.right) {
+                        return loopNode2(node, node.right)
+                    } else {
+                        return loopNode2(node, node.left)
+                    }
+                } else {
+                    if (node.left) {
+                        return loopNode2(node, node.left)
+                    } else {
+                        return loopNode2(node, node.right)
+                    }
+                }
+            }
+        }      
+
+        if (!rN.left && !rN.right) {
+            if (!pN) {
+                this.root = null;
+            } else if (pN.left === rN) { 
+                pN.left = null
+            } else {
+                pN.right = null
+            };
+
+            return;
+        }
+
+        let [succParent, succ] = rN.right 
+            ? loopNode2(rN, rN.right) 
+            : loopNode2(rN, rN.left);
+
+        rN.data = succ.data;
+
+        if (succParent.left === succ) {
+            succParent.left = succ.right ?? null
+        } else {
+            succParent.right = succ.right ?? null
+        };   
+    };
+    
 
     levelOrderForEach(callback) {
 
