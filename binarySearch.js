@@ -191,7 +191,7 @@ export default class BinarySearch {
         
         this.postOrderForEach(callback.left, order); 
         this.postOrderForEach(callback.right, order); 
-        order.push(callback.data); 
+        order.push((callback.data)); 
 
         return order;
     }
@@ -225,15 +225,29 @@ export default class BinarySearch {
             d++;
         }
 
-        return -1; // not found (or use -1 if you prefer)
+        return -1;
         }
 
     isBalance() {
-        
+        function checkHeight(node) {
+            if (!node) return -1;
+
+            let lHeight = checkHeight(node.left);
+            if (lHeight === -2) return -2;
+
+            let rHeight = checkHeight(node.right);
+            if (rHeight === -2) return -2;
+    
+            if (lHeight - rHeight > 1 || rHeight - lHeight > 1) return -2;
+
+            return Math.max(lHeight, rHeight) + 1
+        }
+
+        return checkHeight(this.root) !== -2;
     }
 
     rebalance() {
-        
+        this.buildTree(this.inOrderForEach(this.root))
     }
 
     prettyPrint = (node, prefix = '', isLeft = true) => {
