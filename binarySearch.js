@@ -197,15 +197,39 @@ export default class BinarySearch {
     }
 
     height(value) {
+        function loopNode(node) {
+            if (!node) return null;
+            if (node.data === value) return node;
+            if (node.data > value) return loopNode(node.left);
+            return loopNode(node.right);
+        }
 
+        function getHeight(node) {
+            if (!node) return -1;
+            let lHeight = getHeight(node.left);
+            let rHeight = getHeight(node.right);
+            return Math.max(lHeight, rHeight) + 1;
+        }
+
+        const node = loopNode(this.root);
+        return node ? getHeight(node) : -1;
     }
 
     depth(value) {
+        let node = this.root;
+        let d = 0;
 
-    }
+        while (node) {
+            if (node.data === value) return d;
+            node = value < node.data ? node.left : node.right;
+            d++;
+        }
+
+        return -1; // not found (or use -1 if you prefer)
+        }
 
     isBalance() {
-
+        
     }
 
     rebalance() {
