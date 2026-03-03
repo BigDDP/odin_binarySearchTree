@@ -247,7 +247,26 @@ export default class BinarySearch {
     }
 
     rebalance() {
-        this.buildTree(this.inOrderForEach(this.root))
+        const inorder = this.inOrderForEach(this.root)
+
+        function reorderList(currentArr, newArr = []) {
+            let currLength = currentArr.length;
+
+            if (currLength < 3) {
+                if (currentArr[0]) newArr.push(currentArr[0])
+                if (currentArr[1]) newArr.push(currentArr[1])
+            } else {
+                let split = Math.floor(currLength / 2);
+                newArr.push(currentArr[split]);
+
+                reorderList(currentArr.slice(0,split), newArr);
+                reorderList(currentArr.slice(split+1,currLength), newArr);
+            }
+            
+            return newArr;
+        }
+        
+        this.buildTree(reorderList(inorder));
     }
 
     prettyPrint = (node, prefix = '', isLeft = true) => {
